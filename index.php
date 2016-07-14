@@ -5,39 +5,52 @@
 			<h1>Wanna convert?</h1>
 		</body>
 	</html>
+
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<form action="upload.php" method="POST" enctype="multipart/form-data">
+    <input type="file" name="fileToUpload" id="fileToUpload">
+    <input type="submit" value="Upload Image" name="submit">
+</form>
+
+</body>
+</html>
+
 <?php
 
-$array = array("_", "~", "=", "$","#");
+$array = array("○", "◎", "◍", "◉","●");
 
 function LoadJpeg($imgname)
 {
-    /* Пытаемся открыть */
     $im = @imagecreatefromjpeg($imgname);
 
-    /* Если не удалось */
     if(!$im)
     {
-        /* Создаем пустое изображение */
         $im  = imagecreatetruecolor(150, 30);
         $bgc = imagecolorallocate($im, 255, 255, 255);
         $tc  = imagecolorallocate($im, 0, 0, 0);
 
         imagefilledrectangle($im, 0, 0, 150, 30, $bgc);
 
-        /* Выводим сообщение об ошибке */
-        imagestring($im, 1, 5, 5, 'Ошибка загрузки ' . $imgname, $tc);
+        imagestring($im, 1, 5, 5, 'Upload mistake' . $imgname, $tc);
 
     }
 
     return $im;
 }
 
-$img = LoadJpeg('img.jpg');
+$img=0;
+if($_GET['name'])
+{
+	$img = LoadJpeg('uploads/'.$_GET['name']);
+}
+
 
 $pic_width = imagesx($img);
 $pic_height = imagesy($img);
-echo $pic_width;
-echo $pic_height;
 
 for ($i=0; $i < $pic_width; $i++)
 { 
@@ -68,21 +81,25 @@ for ($i=0; $i < $pic_width; $i++)
 		{
 			$sympic[$i][$j]=$array[4];
 		}
-
-
-
-		//var_dump($r, $g, $b);
 	}
 }
 
-for ($i=0; $i < $pic_width; $i++)
+if($pic_width>32)
+{
+
+}
+
+for ($i=0; $i < $pic_height; $i++)
 { 
 	echo "<br>";
-	for ($j=0; $j < $pic_height; $j++)
+	for ($j=0; $j < $pic_width; $j++)
 	{ 
 		echo $sympic[$j][$i];
-		echo "&nbsp;&nbsp;&nbsp;";
+		echo " ";
 	}
 }
 
+
+
 ?>
+
